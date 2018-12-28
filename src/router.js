@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './components/Home.vue';
-import Test from './components/Test.vue'
+import NewTodo from './components/NewTodo.vue'
+import PageNotFound from './components/PageNotFound.vue'
 
 Vue.use(Router)
 
@@ -11,9 +12,13 @@ const routes = [{
         component: Home
     },
     {
-        path: '/test',
-        name: 'test',
-        component: Test
+        path: '/new',
+        name: 'new todo',
+        component: NewTodo
+    },
+    {
+        path: "*",
+        component: PageNotFound
     }
 ]
 
