@@ -57,6 +57,7 @@
             <button class="destroy btn btn-secondary" v-on:click="removeTodo(todo)">X</button>
           </div>
         </div>
+        <small><i>Created: {{todo.created}}</i></small>
       </li>
     </ul>
 
@@ -94,14 +95,17 @@ export default {
 
   created() {
     //get realtime updates from database
-    todosCollection.onSnapshot(snap => {
+    todosCollection.orderBy("created").onSnapshot(snap => {
       let data = [];
 
       snap.forEach(doc => {
+        var timeStamp = new Date(doc.data().created)
+        var date = timeStamp.toDateString()
         data.push({
           id: doc.id,
           title: doc.data().title,
           completed: doc.data().completed,
+          created: date,
           editing: false
         });
       });
@@ -165,7 +169,8 @@ export default {
       // 3. Add a new collection document to "todos"
       todosCollection.add({
         title: value,
-        completed: false
+        completed: false,
+        created: Date.now()
       });
 
       // clear out the newTodo variable
