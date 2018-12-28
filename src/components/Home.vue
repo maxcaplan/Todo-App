@@ -188,7 +188,10 @@ export default {
     editTodo: function(todo) {
       this.beforeEditCache = todo.title;
       this.editedTodo = todo;
-      todo.editing = true
+      for (var i = 0; i < this.todos.length; i++) {
+        this.todos[i].editing = false
+      }
+      todo.editing = true;
     },
 
     doneEdit: function(todo) {
@@ -207,13 +210,13 @@ export default {
           title: title
         });
       }
-      todo.editing = false
+      todo.editing = false;
     },
 
     cancelEdit: function(todo) {
       this.editedTodo = null;
       todo.title = this.beforeEditCache;
-      todo.editing = false
+      todo.editing = false;
     },
 
     removeCompleted: function() {
