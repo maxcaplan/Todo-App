@@ -1,9 +1,7 @@
 <template>
   <div class="container">
-    <h1>Home</h1>
-    <h2>{{currentTime}}</h2>
     <!-- <button class="btn btn-secondary" @click="makeData">Make</button> -->
-    <hr>
+
     <!-- <input
       class="form-control mb-3 new-todo"
       autofocus
@@ -89,13 +87,11 @@
 </template>
 <script>
 import db from "../firebase/firebaseInit.js";
-import moment from 'moment'
 var todosCollection = db.collection("todos");
 
 export default {
   data() {
     return {
-      currentTime: null,
       test: [],
       loading: false,
       newTodo: "",
@@ -131,9 +127,6 @@ export default {
         this.loading = true;
       }
     });
-
-    this.currentTime = moment().format("LTS");
-    setInterval(() => this.updateCurrentTime(), 1 * 1000);
   },
 
   filters: {
@@ -178,11 +171,6 @@ export default {
     },
     doneTestEdit(todo) {
       todo.editing = false;
-    },
-
-    //clock script
-    updateCurrentTime() {
-      this.currentTime = moment().format('LTS');
     },
 
     //todo logic

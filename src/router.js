@@ -8,16 +8,17 @@ Vue.use(Router)
 
 const routes = [{
         path: '/',
-        name: 'home',
+        name: 'Home',
         component: Home
     },
     {
         path: '/new',
-        name: 'new todo',
+        name: 'New',
         component: NewTodo
     },
     {
         path: "*",
+        name: "err",
         component: PageNotFound
     }
 ]

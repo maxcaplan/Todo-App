@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <h1>New Todo</h1>
-    <hr>
     <form @submit.prevent="submit">
       <div class="form-group">
         <input
