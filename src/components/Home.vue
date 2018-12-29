@@ -3,15 +3,16 @@
     <h1>Home</h1>
     <!-- <button class="btn btn-secondary" @click="makeData">Make</button> -->
     <hr>
-    <input
+    <!-- <input
       class="form-control mb-3 new-todo"
       autofocus
       autocomplete="off"
       placeholder="What needs to be done?"
       v-model="newTodo"
       v-on:keyup.enter="addTodo"
-    >
-    <ul class="todo-list list-group mb-3" v-if="todos.length">
+    >-->
+    <i v-if="loading" class="fas fa-spinner fa-4x fa-pulse mb-3 d-flex justify-content-center"></i>
+    <ul class="todo-list list-group mb-3">
       <!-- The list of todo items -->
       <li
         v-for="todo in todos"
@@ -57,10 +58,17 @@
             <button class="destroy btn btn-secondary" v-on:click="removeTodo(todo)">X</button>
           </div>
         </div>
-        <small><i>Created: {{todo.created}}</i></small>
+        <small>
+          <i>Created: {{todo.created}}</i>
+        </small>
       </li>
+      <router-link
+        to="/new"
+        class="list-group-item list-group-item-action bg-info text-white border-0 text-center"
+      >What needs to be done?</router-link>
     </ul>
 
+    <!-- <button class="btn btn-lg btn-info btn-block border-0">What needs to be done?</button> -->
     <div class="row">
       <div class="col">
         <span class="todo-count" v-if="remaining > 0">
@@ -70,7 +78,7 @@
       </div>
       <div class="col text-right">
         <button
-          class="clear-completed btn btn-primary"
+          class="clear-completed btn btn-success"
           @click="removeCompleted"
           v-if="todos.length > remaining"
         >Clear completed</button>
@@ -86,6 +94,7 @@ export default {
   data() {
     return {
       test: [],
+      loading: false,
       newTodo: "",
       todos: [],
       editedTodo: null,
@@ -94,13 +103,14 @@ export default {
   },
 
   created() {
+    this.loading = true;
     //get realtime updates from database
     todosCollection.orderBy("created").onSnapshot(snap => {
       let data = [];
 
       snap.forEach(doc => {
-        var timeStamp = new Date(doc.data().created)
-        var date = timeStamp.toDateString()
+        var timeStamp = new Date(doc.data().created);
+        var date = timeStamp.toDateString();
         data.push({
           id: doc.id,
           title: doc.data().title,
@@ -111,6 +121,12 @@ export default {
       });
 
       this.todos = data;
+
+      if (this.todos.length > 0) {
+        this.loading = false;
+      } else {
+        this.loading = true;
+      }
     });
   },
 
@@ -194,7 +210,7 @@ export default {
       this.beforeEditCache = todo.title;
       this.editedTodo = todo;
       for (var i = 0; i < this.todos.length; i++) {
-        this.todos[i].editing = false
+        this.todos[i].editing = false;
       }
       todo.editing = true;
     },
@@ -236,6 +252,9 @@ export default {
       }
 
       batch.commit();
+    },
+    redirect() {
+      this.$router.push("/new");
     }
   }
 };
